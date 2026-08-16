@@ -1,49 +1,35 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: hakalkan <hakalkan@student.42istanbul.c    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/14 04:00:18 by hakalkan          #+#    #+#             */
-/*   Updated: 2026/06/14 04:08:51 by hakalkan         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "phonebook.hpp"
 
+# include <iostream>
+# include <cctype>
+
+static std::string toUpper(std::string value)
+{
+    for (std::string::size_type i = 0; i < value.size(); ++i)
+        value[i] = static_cast<char>(std::toupper(static_cast<unsigned char>(value[i])));
+    return value;
+}
 
 int main()
 {
-    std::string input;
     std::string command;
-    
-    Phonebook phonebook;
-    
-    command = "***************************************\n"
-              "*          search, add or exit        *\n"
-              "***************************************\n\n";
-    while (1)
-    {
-        input = "";
+    PhoneBook phonebook;
 
-        if(input == "exit")
-        {
-            //çıkış yapılacak
-        }
-        if(input == "add")
-        {
-            // kişi ekleme işlemi yapılacak
-        }
-        else if(input == "search")
-        {
-            // kişi arama işlemi yapılacak
-        }
+    while (true)
+    {
+        std::cout << "Enter command (ADD, SEARCH, EXIT): ";
+        if (!std::getline(std::cin, command))
+            break ;
+        command = toUpper(command);
+
+        if (command == "ADD")
+            phonebook.addContact();
+        else if (command == "SEARCH")
+            phonebook.searchContact();
+        else if (command == "EXIT")
+            break ;
         else
-        {
-            // geçersiz komut uyarısı verilecek
-        }
-    }    
-    
-    return 0;
+            std::cout << "Invalid command." << std::endl;
+    }
+    return (0);
 }
