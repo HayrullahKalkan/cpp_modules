@@ -1,25 +1,32 @@
+#include "Sed.hpp"
 
-
-
-int main(int ac, char **av)
+int main(int argc, char **argv)
 {
-    std::ifstream file(av[1]);
+    if (argc != 4)
+    {
+        std::cerr << "Usage: ./sed <filename> <s1> <s2>"
+                  << std::endl;
+        return (1);
+    }
 
-    if (ac != 4)
+    std::string filename = argv[1];
+    std::string s1 = argv[2];
+    std::string s2 = argv[3];
+    std::string content;
+
+    if (s1.empty())
     {
-        std::cout << "Usage: ./convert <value>" << std::endl;
-        return 1;
+        std::cerr << "Error: s1 cannot be empty" << std::endl;
+        return (1);
     }
-    if(!file.is_open())
-    {
-        std::cout << "Error: could not open file" << std::endl;
-        return 1;
-    }
-    std::string line;
-    while (std::getline(file, line))
-    {
-        std::cout << line << std::endl;
-    }
-    file.close();
-    return 0;
+
+    if (!readFile(filename, content))
+        return (1);
+
+    std::string result = replaceAll(content, s1, s2);
+
+    if (!writeFile(filename + ".replace", result))
+        return (1);
+
+    return (0);
 }
